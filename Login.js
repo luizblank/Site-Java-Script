@@ -1,12 +1,17 @@
+import * as React from "react";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useContext } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button } from 'react-native';
 import { UtilsContext } from './context';
+import Modal from "react-native-modal";
 
 export default function Login(props) {
   const [email, setEmail] = useState("")
   const [senha, setSenha] = useState("")
   const {utils, setUtils} = useContext(UtilsContext);
+
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
   return (
     <View style={styles.container}>
@@ -31,11 +36,20 @@ export default function Login(props) {
         <View style = {styles.contentDown}>
         <View style = {styles.myContainer3}>
               <TouchableOpacity style = {styles.touchable}
-              onPress = {() => email == utils.email && senha == utils.senha ? props.navigation.navigate("Usuarios") : 0}>
+              onPress = {() => email == utils.email && senha == utils.senha ? props.navigation.navigate("Usuarios") : handleModal()}>
               <Text>Login</Text>
               </TouchableOpacity>
           </View>
         </View>
+
+        <Modal isVisible={isModalVisible}>
+          <View style = {styles.modal}>
+            <View style = {styles.modalBox}>
+              <Text style = {{marginBottom: "10px", fontSize: "20px", fontWeight: "500"}}>Email ou senha incorretos!</Text>
+              <Button title="Ok" onPress={handleModal} />
+            </View>
+          </View>
+        </Modal>
     </View>
   );
 }
@@ -84,5 +98,14 @@ const styles = StyleSheet.create({
   contentDown: {
     position: "absolute",
     bottom: "0"
+  },
+  modal: {
+    flex: 1,
+    alignItems: "center"
+  },
+  modalBox: {
+    backgroundColor: "white",
+    padding: "10px",
+    borderRadius: "10px"
   }
 });
