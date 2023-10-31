@@ -1,10 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { useState, useContext } from 'react';
-import { UtilsContext } from './context';
 
 export default function Usuarios(props) {
   const {utils, setUtils} = useContext(UtilsContext);
+  var index;
+  for(var i = 0; i < length(utils.nome); i++)
+  {
+    // ajeita aqui!"!!!!!!!"
+    if(utils.nome[i] == )
+  }
 
   return (
     <View style={styles.container}>

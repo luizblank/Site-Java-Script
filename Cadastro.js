@@ -14,9 +14,12 @@ export default function Cadastro(props) {
   const [senha, setSenha] = useState("")
   const [notfy, setNotfy] = useState(false)
 
-  function goToUsuarios(){
-    setUtils({...utils, nome: nome, idade: idade, sexo: sexo, email: email, senha: senha, notfy: notfy})
-    props.navigation.navigate("Usuarios")
+  function mySetUtils() {
+    if(utils.nome && utils.idade && utils.sexo && utils.email && utils.senha)
+      setUtils({...utils, nome: [...utils, nome], idade: [...utils, idade], sexo: [...utils, sexo], email: [...utils, email], senha: [...utils, senha], notfy: [...utils, notfy]})
+
+    else
+      setUtils({...utils, nome: nome, idade: idade, sexo: sexo, email: email, senha: senha, notfy: notfy})
   }
 
   return (
@@ -70,6 +73,7 @@ export default function Cadastro(props) {
             secureTextEntry = {true}
         />
         </View>
+        
 
         <View style = {styles.myContainer}>
         <Text style = {styles.text}>Deseja receber notificações?</Text>
@@ -84,7 +88,7 @@ export default function Cadastro(props) {
 
         <View style = {styles.myContainer}>
         <TouchableOpacity style = {styles.touchable}
-            onPress = {() => goToUsuarios()}>
+            onPress = {() => mySetUtils()}>
             <Text>Cadastro</Text>
         </TouchableOpacity>
         </View>
