@@ -1,11 +1,16 @@
+import * as React from "react";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, 
-    Switch, TouchableOpacity } from 'react-native';
+    Switch, TouchableOpacity, Button } from 'react-native';
 import { UtilsContext } from './context';
+import Modal from "react-native-modal";
 
 export default function Cadastro(props) {
   const {utils, setUtils} = useContext(UtilsContext);
+
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
   const [nome, setNome] = useState("")
   const [idade, setIdade] = useState("")
@@ -15,17 +20,20 @@ export default function Cadastro(props) {
   const [notfy, setNotfy] = useState(false)
 
   function mySetUtils() {
-    if(utils.nome && utils.idade && utils.sexo && utils.email && utils.senha)
-    {
-      setUtils({...utils, nome: [...utils.nome, nome], idade: [...utils.idade, idade], sexo: [...utils.sexo, sexo], email: [...utils.email, email], senha: [...utils.senha, senha], notfy: [...utils.notfy, notfy]})
-      
-    }
+    console.log(utils)
+    if(nome != "" && idade != "" && sexo != "" && email != "" && senha != "")
+      if(Object.keys(utils).length == 0)
+      {
+        if(utils.nome && utils.idade && utils.sexo && utils.email && utils.senha)
+          setUtils({...utils, nome: [...utils.nome, nome], idade: [...utils.idade, idade], sexo: [...utils.sexo, sexo], email: [...utils.email, email], senha: [...utils.senha, senha], notfy: [...utils.notfy, notfy]})
 
+        else
+          setUtils({...utils, nome: [nome], idade: [idade], sexo: [sexo], email: [email], senha: [senha], notfy: [notfy]})
+      }
+      else
+        handleModal()
     else
-    {
-      setUtils({...utils, nome: [nome], idade: [idade], sexo: [sexo], email: [email], senha: [senha], notfy: [notfy]})
-      
-    }
+      handleModal()
   }
 
   return (
@@ -79,8 +87,7 @@ export default function Cadastro(props) {
             secureTextEntry = {true}
         />
         </View>
-        
-
+      
         <View style = {styles.myContainer}>
         <Text style = {styles.text}>Deseja receber notificações?</Text>
         <Switch
@@ -105,6 +112,15 @@ export default function Cadastro(props) {
             <Text>Login</Text>
         </TouchableOpacity>
         </View>
+
+        <Modal isVisible={isModalVisible}>
+          <View style = {styles.modal}>
+            <View style = {styles.modalBox}>
+              <Text style = {{marginBottom: "10px", fontSize: "20px", fontWeight: "500"}}>Email ou senha incorretos!</Text>
+              <Button title="Ok" onPress={handleModal} />
+            </View>
+          </View>
+        </Modal>
   </View>
   );
 }
@@ -147,4 +163,13 @@ const styles = StyleSheet.create({
     padding: "10px",
     borderRadius: "5px",
   },
+  modal: {
+    flex: 1,
+    alignItems: "center"
+  },
+  modalBox: {
+    backgroundColor: "white",
+    padding: "10px",
+    borderRadius: "10px"
+  }
 });
