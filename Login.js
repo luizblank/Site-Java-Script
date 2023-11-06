@@ -2,16 +2,33 @@ import * as React from "react";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button } from 'react-native';
-import { UtilsContext } from './context';
+import { UtilsContext, UtilsContextLogin } from './context';
 import Modal from "react-native-modal";
 
 export default function Login(props) {
   const [email, setEmail] = useState("")
   const [senha, setSenha] = useState("")
+  const {utilsLogin, setUtilsLogin } = useContext(UtilsContextLogin);
   const {utils, setUtils} = useContext(UtilsContext);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
+
+  function setAndNavigate(){
+    console.log(utils)
+    var verify = 0
+    for(var i = 0; i < utils.nome.length; i++)
+    {
+      if(email == utils.email[i] && senha == utils.senha[i])
+      {
+        setUtilsLogin({...utils, email: email, senha: senha})
+        verify = 1
+        props.navigation.navigate("Usuarios")
+      }
+    }
+    if(verify == 0)
+      handleModal()
+  }
 
   return (
     <View style={styles.container}>
@@ -34,10 +51,10 @@ export default function Login(props) {
         </View>
 
         <View style = {styles.contentDown}>
-        <View style = {styles.myContainer3}>
+          <View style = {styles.myContainer3}>
               <TouchableOpacity style = {styles.touchable}
-              onPress = {() => email == utils.email && senha == utils.senha ? props.navigation.navigate("Usuarios") : handleModal()}>
-              <Text>Login</Text>
+                onPress = {() => setAndNavigate()}>
+                <Text>Login</Text>
               </TouchableOpacity>
           </View>
         </View>

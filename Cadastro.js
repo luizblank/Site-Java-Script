@@ -16,10 +16,16 @@ export default function Cadastro(props) {
 
   function mySetUtils() {
     if(utils.nome && utils.idade && utils.sexo && utils.email && utils.senha)
-      setUtils({...utils, nome: [...utils, nome], idade: [...utils, idade], sexo: [...utils, sexo], email: [...utils, email], senha: [...utils, senha], notfy: [...utils, notfy]})
+    {
+      setUtils({...utils, nome: [...utils.nome, nome], idade: [...utils.idade, idade], sexo: [...utils.sexo, sexo], email: [...utils.email, email], senha: [...utils.senha, senha], notfy: [...utils.notfy, notfy]})
+      
+    }
 
     else
-      setUtils({...utils, nome: nome, idade: idade, sexo: sexo, email: email, senha: senha, notfy: notfy})
+    {
+      setUtils({...utils, nome: [nome], idade: [idade], sexo: [sexo], email: [email], senha: [senha], notfy: [notfy]})
+      
+    }
   }
 
   return (
