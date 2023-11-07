@@ -12,14 +12,21 @@ export default function Login(props) {
   const {utils, setUtils} = useContext(UtilsContext);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isModalADMVisible, setIsModalADMVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
+  const handleModalADM = () => setIsModalADMVisible(() => !isModalADMVisible);
 
   function setAndNavigate(){
     console.log(utils)
     var verify = 0
     for(var i = 0; i < utils.nome.length; i++)
     {
-      if(email == utils.email[i] && senha == utils.senha[i])
+      if(email == "Administrador" && senha == "adm")
+      {
+        verify = 1
+        props.navigation.navigate("UsuariosADM")
+      }
+      else if(email == utils.email[i] && senha == utils.senha[i])
       {
         setUtilsLogin({...utils, email: email, senha: senha})
         verify = 1
@@ -62,7 +69,7 @@ export default function Login(props) {
         <Modal isVisible={isModalVisible}>
           <View style = {styles.modal}>
             <View style = {styles.modalBox}>
-              <Text style = {{marginBottom: "10px", fontSize: "20px", fontWeight: "500"}}>Email ou senha incorretos!</Text>
+              <Text style = {{marginBottom: "10px", fontSize: "20px"}}>Email ou senha incorretos!</Text>
               <Button title="Ok" onPress={handleModal} />
             </View>
           </View>

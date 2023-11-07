@@ -10,7 +10,9 @@ export default function Cadastro(props) {
   const {utils, setUtils} = useContext(UtilsContext);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isLoginVisible, setIsLoginVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
+  const handleModalLogin = () => setIsLoginVisible(() => !isLoginVisible);
 
   const [nome, setNome] = useState("")
   const [idade, setIdade] = useState("")
@@ -22,7 +24,7 @@ export default function Cadastro(props) {
   function mySetUtils() {
     console.log(utils)
     if(nome != "" && idade != "" && sexo != "" && email != "" && senha != "")
-      if(Object.keys(utils).length == 0)
+      if(Object.keys(utils).length == 0 || !(utils.email.includes(email)))
       {
         if(utils.nome && utils.idade && utils.sexo && utils.email && utils.senha)
           setUtils({...utils, nome: [...utils.nome, nome], idade: [...utils.idade, idade], sexo: [...utils.sexo, sexo], email: [...utils.email, email], senha: [...utils.senha, senha], notfy: [...utils.notfy, notfy]})
@@ -34,6 +36,13 @@ export default function Cadastro(props) {
         handleModal()
     else
       handleModal()
+  }
+
+  function loginPage() {
+    if(Object.keys(utils).length != 0)
+      props.navigation.navigate("Login")
+    else
+      handleModalLogin()
   }
 
   return (
@@ -108,7 +117,7 @@ export default function Cadastro(props) {
 
         <View style = {styles.myContainer}>
         <TouchableOpacity style = {styles.touchable}
-            onPress = {() => props.navigation.navigate("Login")}>
+            onPress = {() => loginPage()}>
             <Text>Login</Text>
         </TouchableOpacity>
         </View>
@@ -116,8 +125,17 @@ export default function Cadastro(props) {
         <Modal isVisible={isModalVisible}>
           <View style = {styles.modal}>
             <View style = {styles.modalBox}>
-              <Text style = {{marginBottom: "10px", fontSize: "20px", fontWeight: "500"}}>Email ou senha incorretos!</Text>
+              <Text style = {{marginBottom: "10px", fontSize: "20px"}}>Cadastro inválido ou algum campo não foi preenchido!</Text>
               <Button title="Ok" onPress={handleModal} />
+            </View>
+          </View>
+        </Modal>
+
+        <Modal isVisible={isLoginVisible}>
+          <View style = {styles.modal}>
+            <View style = {styles.modalBox}>
+              <Text style = {{marginBottom: "10px", fontSize: "20px"}}>Nenhum usuário cadastrado!</Text>
+              <Button title="Ok" onPress={handleModalLogin} />
             </View>
           </View>
         </Modal>

@@ -2,23 +2,16 @@ import * as React from "react";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { useState, useContext } from 'react';
-import { UtilsContext, UtilsContextLogin } from './context';
+import { UtilsContext } from './context';
 import Modal from "react-native-modal";
 
 export default function Usuarios(props) {
-  const {utils, setUtils} = useContext(UtilsContext);
-  const {utilsLogin, setUtilsLogin} = useContext(UtilsContextLogin);
-  var index;
-  for(var i = 0; i < utils.nome.length; i++)
-  {
-    if(utils.email[i] == utilsLogin.email)
-      index = i;
-  }
+  const { utils, setUtils } = useContext(UtilsContext);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
-  function deleteUser(){
+  function deleteUser(index) {
     utils.nome.splice(index, 1)
     utils.idade.splice(index, 1)
     utils.sexo.splice(index, 1)
@@ -29,49 +22,67 @@ export default function Usuarios(props) {
     props.navigation.navigate("Login")
   }
 
+  function getId(email){
+    var index;
+    for(var i = 0; i < email.length; i++)
+    {
+      if(utils.email[i] == email)
+      {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+
   return (
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View>
-            <Text style = {styles.title}>Usuário</Text>
+          <Text style={styles.title}>Página do Administrador</Text>
         </View>
 
-        <View style = {styles.myContainer}>
-          <View>
-            <Text>Usuário (e-mail):</Text>
-            <Text style = {{fontSize: "20px", fontWeight: "500"}}>{utils.email[index]}</Text>
-          </View>
-            
-          <View>
-            <TouchableOpacity style = {styles.showinfo}
-              onPress = {() => handleModal()}>
-              <Text>Mostrar informações</Text>
-            </TouchableOpacity>
+        {utils.email.map((item) => {
+          return(
+            <View style={styles.myContainer}>
+              <View>
+                <Text>Usuário (e-mail):</Text>
+                <Text style={{ fontSize: "20px", fontWeight: "500" }}>{item}</Text>
+              </View>
 
-            <TouchableOpacity style = {styles.delete}
-              onPress = {() => deleteUser()}>
-              <Text>Deletar usuário</Text>
-            </TouchableOpacity>
-          </View>
+              <View>
+                <TouchableOpacity id={item} style={styles.showinfo}
+                  onPress={() => handleModal()}>
+                  <Text>Mostrar informações</Text>
+                </TouchableOpacity>
 
-          <Modal isVisible={isModalVisible}>
-            <View style = {styles.modal}>
-              <View style = {styles.modalBox}>
-                <View>
-                  <Text style = {{fontSize: "18px", fontWeight: "500", marginBottom: "10px"}}>Informações do usuário</Text>
-                  <Text style = {styles.modalText}>Nome: {utils.nome[index]}</Text>
-                  <Text style = {styles.modalText}>Idade: {utils.nome[index]}</Text>
-                  <Text style = {styles.modalText}>Sexo: {utils.nome[index]}</Text>
-                  <Text style = {styles.modalText}>Recebe Notificação: {utils.notfy[index] == false ? "Não" : "Sim"}</Text>
-                  <Button title="Ok" onPress={handleModal} />
-                </View>
+                <TouchableOpacity style={styles.delete}
+                  onPress={() => deleteUser(getId(item))}>
+                  <Text>Deletar usuário</Text>
+                </TouchableOpacity>
               </View>
             </View>
-          </Modal>
-        </View>
+          )
+        })}
+
+        <Modal isVisible={isModalVisible}>
+          <View style={styles.modal}>
+            <View style={styles.modalBox}>
+              <View>
+                <Text style={{ fontSize: "18px", fontWeight: "500", marginBottom: "10px" }}>Informações do usuário</Text>
+                <Text style={styles.modalText}>Nome: {utils.nome[index]}</Text>
+                <Text style={styles.modalText}>Idade: {utils.nome[index]}</Text>
+                <Text style={styles.modalText}>Sexo: {utils.nome[index]}</Text>
+                <Text style={styles.modalText}>Recebe Notificação: {utils.notfy[index] == false ? "Não" : "Sim"}</Text>
+                <Button title="Ok" onPress={handleModal} />
+              </View>
+            </View>
+          </View>
+        </Modal>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
