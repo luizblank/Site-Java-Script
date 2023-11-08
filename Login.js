@@ -12,9 +12,7 @@ export default function Login(props) {
   const {utils, setUtils} = useContext(UtilsContext);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [isModalADMVisible, setIsModalADMVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
-  const handleModalADM = () => setIsModalADMVisible(() => !isModalADMVisible);
 
   function setAndNavigate(){
     console.log(utils)

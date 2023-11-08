@@ -5,11 +5,19 @@ import { useState, useContext } from 'react';
 import { UtilsContext } from './context';
 import Modal from "react-native-modal";
 
+var index;
+
 export default function Usuarios(props) {
   const { utils, setUtils } = useContext(UtilsContext);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
+
+  function passInfoToModal(email){
+    index = getId(email);
+    setIsModalVisible(!isModalVisible);
+    console.log(index);
+  }
 
   function deleteUser(index) {
     utils.nome.splice(index, 1)
@@ -19,7 +27,10 @@ export default function Usuarios(props) {
     utils.senha.splice(index, 1)
     utils.notfy.splice(index, 1)
 
-    props.navigation.navigate("Login")
+    if(utils.email.length != 0)
+      props.navigation.navigate("Login")
+    else
+      props.navigation.navigate("Cadastro")
   }
 
   function getId(email){
@@ -52,7 +63,7 @@ export default function Usuarios(props) {
 
               <View>
                 <TouchableOpacity id={item} style={styles.showinfo}
-                  onPress={() => handleModal()}>
+                  onPress={() => passInfoToModal(item)}>
                   <Text>Mostrar informações</Text>
                 </TouchableOpacity>
 
@@ -71,8 +82,8 @@ export default function Usuarios(props) {
               <View>
                 <Text style={{ fontSize: "18px", fontWeight: "500", marginBottom: "10px" }}>Informações do usuário</Text>
                 <Text style={styles.modalText}>Nome: {utils.nome[index]}</Text>
-                <Text style={styles.modalText}>Idade: {utils.nome[index]}</Text>
-                <Text style={styles.modalText}>Sexo: {utils.nome[index]}</Text>
+                <Text style={styles.modalText}>Idade: {utils.idade[index]}</Text>
+                <Text style={styles.modalText}>Sexo: {utils.sexo[index]}</Text>
                 <Text style={styles.modalText}>Recebe Notificação: {utils.notfy[index] == false ? "Não" : "Sim"}</Text>
                 <Button title="Ok" onPress={handleModal} />
               </View>

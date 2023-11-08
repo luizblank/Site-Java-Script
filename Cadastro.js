@@ -14,12 +14,12 @@ export default function Cadastro(props) {
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
   const handleModalLogin = () => setIsLoginVisible(() => !isLoginVisible);
 
-  const [nome, setNome] = useState("")
-  const [idade, setIdade] = useState("")
-  const [sexo, setSexo] = useState("")
-  const [email, setEmail] = useState("")
-  const [senha, setSenha] = useState("")
-  const [notfy, setNotfy] = useState(false)
+  const [nome, setNome] = useState("");
+  const [idade, setIdade] = useState("");
+  const [sexo, setSexo] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [notfy, setNotfy] = useState(false);
 
   function mySetUtils() {
     console.log(utils)
@@ -27,22 +27,27 @@ export default function Cadastro(props) {
       if(Object.keys(utils).length == 0 || !(utils.email.includes(email)))
       {
         if(utils.nome && utils.idade && utils.sexo && utils.email && utils.senha)
-          setUtils({...utils, nome: [...utils.nome, nome], idade: [...utils.idade, idade], sexo: [...utils.sexo, sexo], email: [...utils.email, email], senha: [...utils.senha, senha], notfy: [...utils.notfy, notfy]})
+          setUtils({...utils, nome: [...utils.nome, nome], idade: [...utils.idade, idade], sexo: [...utils.sexo, sexo], email: [...utils.email, email], senha: [...utils.senha, senha], notfy: [...utils.notfy, notfy]});
 
         else
-          setUtils({...utils, nome: [nome], idade: [idade], sexo: [sexo], email: [email], senha: [senha], notfy: [notfy]})
+          setUtils({...utils, nome: [nome], idade: [idade], sexo: [sexo], email: [email], senha: [senha], notfy: [notfy]});
       }
       else
-        handleModal()
+        handleModal();
     else
-      handleModal()
+      handleModal();
   }
 
   function loginPage() {
     if(Object.keys(utils).length != 0)
-      props.navigation.navigate("Login")
+    {
+      if(utils.email.length != 0)
+        props.navigation.navigate("Login");
+      else
+        handleModalLogin();
+    }
     else
-      handleModalLogin()
+      handleModalLogin();
   }
 
   return (
@@ -134,7 +139,7 @@ export default function Cadastro(props) {
         <Modal isVisible={isLoginVisible}>
           <View style = {styles.modal}>
             <View style = {styles.modalBox}>
-              <Text style = {{marginBottom: "10px", fontSize: "20px"}}>Nenhum usuário cadastrado!</Text>
+              <Text style = {{marginBottom: "10px", fontSize: "20px"}}>Não há usuários cadastrados!</Text>
               <Button title="Ok" onPress={handleModalLogin} />
             </View>
           </View>
